@@ -1,12 +1,19 @@
 #!/usr/bin/python3
 import cmd
 import sys
+from models.base_model import BaseModel
+from models.user import User
+from models.__init__ import storage
 
+"""classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
+        "City": City, "State": State, "Amenity": Amenity,
+        "Review": Review}"""
+classes = {"BaseModel": BaseModel, "User": User}
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def do_quit(self, arg):
-        "Quit command to exit the program"
+        """Quit command to exit the program"""
         return True
 
     def help_quit(self):
@@ -25,6 +32,86 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Execute nothing when an empty line is entered"""
         pass
+
+    def do_create(self, arg):
+        if not arg:
+            print("** class name missing **")
+            return
+        class_name = arg.split(" ")[0]
+        if class_name not in classes:
+            print("** class doesn't exist **")
+        else:
+            new_instance = classes[class_name]()
+            new_instance.save()
+            print(new_instance.id)
+
+    def do_show(self, arg):
+        if not arg:
+            print("** class name missing **")
+            return
+        args = arg.split()
+        class_name = args[0]
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        instance_id = args[1]
+        if not instance_id:
+            print("** instance id missing **")
+            return
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        instance = storage.all()[key]
+        print(instance)
+
+    def do_destroy(self, arg):
+        if not arg:
+            print("** class name missing **")
+            return
+        args = arg.split()
+        class_name = args[0]
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        instance_id = args[1]
+        if not instance_id:
+            print("** instance id missing **")
+            return
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        instance = storage.all()[key]
+        del storage.all()[key]
+        del instance
+
+    def do_all(self, arg):
+        if arg not in classes and arg != "":
+            print("** class doesn't exist **")
+            return
+        print_list = []
+        if arg:
+            class_name = arg
+            for key, value in storage.all().items():
+                if class_name in key:
+                    instance = value
+                    print_list.append(str(instance))
+            print(print_list)
+        else:
+            for key, value in storage.all().items():
+                instance = value
+                print_list.append(str(instance))
+            print(print_list)
+
+
+
 if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()

@@ -146,9 +146,14 @@ class HBNBCommand(cmd.Cmd):
 
         attribute_name = args[2]
 
+        attribute_value = " ".join(args[3:]).strip('"')
+
+
+        if not hasattr(instance, attribute_name):
+            setattr(instance, attribute_name, "")
+
         attribute_type = type(getattr(instance, attribute_name))
 
-        attribute_value = " ".join(args[3:]).strip('"')
         casted_value = attribute_type(attribute_value)
         setattr(instance, attribute_name, casted_value)
         instance.save()

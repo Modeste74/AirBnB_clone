@@ -110,6 +110,49 @@ class HBNBCommand(cmd.Cmd):
                 print_list.append(str(instance))
             print(print_list)
 
+    def do_update(self, arg):
+
+        args = arg.split()
+        class_name = args[0]
+
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+
+        if not instance_id:
+            print("** instance id missing **")
+            return
+
+        key = "{}.{}".format(class_name, instance_id)
+
+        if key not in storage.all():
+            print("no instance found **")
+            return
+
+        instance = storage.all()[key]
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attribute_name = args[2]
+
+        attribute_type = type(getattr(instance, attribute_name))
+
+        attribute_value = " ".join(args[3:]).strip('"')
+        casted_value = attribute_type(attribute_value)
+        setattr(instance, attribute_name, casted_value)
+        instance.save()
+
 
 
 if not sys.stdin.isatty():

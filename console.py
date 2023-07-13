@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_quit(self):
-        """helper method for quit command"""
+        """Helper method for quit command"""
         print("Quit command to exit the program")
         print()
 
@@ -49,6 +49,11 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
+    def help_create(self):
+        """Prints help documentation for create"""
+        print("Creates a new instance of a specified class\n")
+        print("Usage: create <class_name>\n")
+
     def do_show(self, arg):
         if not arg:
             print("** class name missing **")
@@ -71,6 +76,11 @@ class HBNBCommand(cmd.Cmd):
             return
         instance = storage.all()[key]
         print(instance)
+
+    def help_show(self):
+        """Prints the help documentation for show"""
+        print("Displays details of a specific instance\n")
+        print("Usage: show <class_name> <instance_id>\n")
 
     def do_destroy(self, arg):
         if not arg:
@@ -96,6 +106,11 @@ class HBNBCommand(cmd.Cmd):
         del storage.all()[key]
         del instance
 
+    def help_destroy(self):
+        """Prints help documentation for destroy"""
+        print("Deletes a specific instance\n")
+        print("Usage: destroy <class_name> <instance_id>\n")
+
     def do_all(self, arg):
         if arg not in classes and arg != "":
             print("** class doesn't exist **")
@@ -113,6 +128,11 @@ class HBNBCommand(cmd.Cmd):
                 instance = value
                 print_list.append(str(instance))
             print(print_list)
+
+    def help_all(self):
+        """Prints help documentation for all"""
+        print("Displays all instances/instances of a specified class\n")
+        print("Usage: all [<class_name>]\n")
 
     def do_update(self, arg):
 
@@ -161,6 +181,11 @@ class HBNBCommand(cmd.Cmd):
         casted_value = attribute_type(attribute_value)
         setattr(instance, attribute_name, casted_value)
         instance.save()
+
+    def help_update(self):
+        """Prints the help documentation for update"""
+        print("Updates the attrs of a specific instance\n")
+        print("Usage: update <class_name> <instance_id> <attribute_name> <attribute_value>\n")
 
 
 

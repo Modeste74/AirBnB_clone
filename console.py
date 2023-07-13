@@ -3,12 +3,16 @@ import cmd
 import sys
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.city import City
+from models.state import State
+from models.amenity import Amenity
+from models.review import Review
 from models.__init__ import storage
 
-"""classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
+classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
         "City": City, "State": State, "Amenity": Amenity,
-        "Review": Review}"""
-classes = {"BaseModel": BaseModel, "User": User}
+        "Review": Review}
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 

@@ -173,13 +173,11 @@ if not sys.stdin.isatty():
     hbnb_cmd.prompt = "(hbnb) "
 
     for command in commands:
+        print(hbnb_cmd.prompt)
         hbnb_cmd.onecmd(command)
         if hbnb_cmd.do_quit:
             break
-
-    if not hbnb_cmd.do_quit:
-        hbnb_cmd.cmdloop(intro="")
-
+    print(hbnb_cmd.prompt)
 else:
     if __name__ == '__main__':
         HBNBCommand().cmdloop()

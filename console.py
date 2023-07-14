@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import re
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -50,12 +51,13 @@ class HBNBCommand(cmd.Cmd):
                 return f"all {class_name}"
             if command == "count()":
                 return f"count {class_name}"
-            if command.startswith("show("):
-                command = command[5:-1].strip()
-                return f"show {class_name} {command}"
-            if command.startswith("destroy("):
+            if command.startswith("show(") and command.endswith(")"):
+                instance_id = re.search(r'"([^"]*)"', line).group(1)
+                return f"show {class_name} {instance_id}"
+            if command.startswith("destroy(") and command.endswith(")"):
                 command = command[8:-1].strip()
-                return f"destroy {class_name} {command}"
+                instance_id = re.search(r'"([^"]*)"', line).group(1)
+                return f"destroy {class_name} {instance_id}"
             if command.startswith("update("):
                 command = command[7:-1].strip()
                 instance_id, updates_str = command.split(",", 1)

@@ -8,13 +8,11 @@ from models.city import City
 from models.state import State
 from models.amenity import Amenity
 from models.review import Review
-from models.__init__ import storage
+from models import storage
 
 classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
-           "City": City, "State": State, "Amenity": Amenity,
-           "Review": Review}
-
-
+        "City": City, "State": State, "Amenity": Amenity,
+        "Review": Review}
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
@@ -40,39 +38,31 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def precmd(self, line):
-        """Parse the line and modify it for advanced command syntax"""
-        line = line.strip()  # Remove leading/trailing whitespaces
-
-        # Split the line into individual components
+        line = line.strip()
         components = line.split(".")
-
         if len(components) > 1:
-            # Extract class name and command
             class_name, command = components[0], components[1]
-            class_name = class_name.capitalize()
-
-            # Check if the class name is valid
+            """class_name = class_name.capitalize()"""
             if class_name not in classes:
                 print("** class doesn't exist **")
                 return ""
-
-            # Handle "all" command
             if command == "all()":
                 return f"all {class_name}"
-
-            # Handle "count" command
             if command == "count()":
                 return f"count {class_name}"
-
-            # Handle "show" command
             if command.startswith("show("):
                 command = command[5:-1].strip()
                 return f"show {class_name} {command}"
-
-            # Handle "destroy" command
             if command.startswith("destroy("):
                 command = command[8:-1].strip()
                 return f"destroy {class_name} {command}"
+            if command.startswith("update("):
+                command = command[7:-1].strip()
+                instance_id, updates_str = command.split(",", 1)
+                instance_id = instance_id.strip(' "')
+                updates = eval(updates_str.strip())
+                attribute_updates = " ".join([f"{key} {value}" for key, value in updates.items()])
+                return f"update {class_name} {instance_id} {attribute_updates}"
 
         return line
 
@@ -172,7 +162,6 @@ class HBNBCommand(cmd.Cmd):
         """Prints help documentation for all"""
         print("Displays all instances/instances of a specified class\n")
         print("Usage: all [<class_name>]\n")
-
     def do_count(self, arg):
         if not arg:
             print("** class name missing **")
@@ -190,7 +179,29 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: count <class_name>\n")
 
     def do_update(self, arg):
+
         args = arg.split()
+        """if len(args) < 3:
+            print("Error")
+            return
+        class_name = args[0]
+        instance_id = args[1]
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in storage.all():
+            print("no instance found **")
+            return
+        instance = storage.all()[key]
+        attribute_dict = eval("{" + " ".join(args[2:]) + "}")
+        for attribute_name, attribute_value in attribute_dict.items():
+            if not hasattr(instance, attribute_name):
+                setattr(instance, attribute_name, "")
+            attribute_type = type(getattr(instance, attribute_name))
+            casted_value = attribute_type(attribute_value)
+            setattr(instance, attribute_name, casted_value)
+        instance.save()"""
         class_name = args[0]
 
         if class_name not in classes:
@@ -223,14 +234,10 @@ class HBNBCommand(cmd.Cmd):
             return
 
         attribute_name = args[2]
-
         attribute_value = " ".join(args[3:]).strip('"')
-
         if not hasattr(instance, attribute_name):
             setattr(instance, attribute_name, "")
-
         attribute_type = type(getattr(instance, attribute_name))
-
         casted_value = attribute_type(attribute_value)
         setattr(instance, attribute_name, casted_value)
         instance.save()
@@ -241,11 +248,13 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> <attribute_value>\n")
 
 
+
 if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
     hbnb_cmd.intro = ""
+
     hbnb_cmd.prompt = "(hbnb) "
 
     for command in commands:

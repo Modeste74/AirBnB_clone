@@ -2,6 +2,7 @@
 """defines a class BaseModel"""
 
 import uuid
+import models
 from datetime import datetime
 
 """formated_time = specific_datetime.strftime("%Y-%m-%d %H:%M:%S:%f")"""
@@ -26,10 +27,8 @@ class BaseModel:
         return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
-        from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         instance_dict = self.__dict__.copy()

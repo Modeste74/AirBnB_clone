@@ -27,14 +27,8 @@ class FileStorage:
         with open(self.__file_path, "w") as f:
             json.dump(js_objs, f)
 
-    def reload(self, storage=None):
+    def reload(self):
         from models.base_model import BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
         try:
             with open(self.__file_path, "r") as filename:
                 json_data = json.load(filename)

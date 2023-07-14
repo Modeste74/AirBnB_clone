@@ -11,8 +11,10 @@ from models.review import Review
 from models.__init__ import storage
 
 classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
-        "City": City, "State": State, "Amenity": Amenity,
-        "Review": Review}
+           "City": City, "State": State, "Amenity": Amenity,
+           "Review": Review}
+
+
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
@@ -36,6 +38,43 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Execute nothing when an empty line is entered"""
         pass
+
+    def precmd(self, line):
+        """Parse the line and modify it for advanced command syntax"""
+        line = line.strip()  # Remove leading/trailing whitespaces
+
+        # Split the line into individual components
+        components = line.split(".")
+
+        if len(components) > 1:
+            # Extract class name and command
+            class_name, command = components[0], components[1]
+            class_name = class_name.capitalize()
+
+            # Check if the class name is valid
+            if class_name not in classes:
+                print("** class doesn't exist **")
+                return ""
+
+            # Handle "all" command
+            if command == "all()":
+                return f"all {class_name}"
+
+            # Handle "count" command
+            if command == "count()":
+                return f"count {class_name}"
+
+            # Handle "show" command
+            if command.startswith("show("):
+                command = command[5:-1].strip()
+                return f"show {class_name} {command}"
+
+            # Handle "destroy" command
+            if command.startswith("destroy("):
+                command = command[8:-1].strip()
+                return f"destroy {class_name} {command}"
+
+        return line
 
     def do_create(self, arg):
         if not arg:
@@ -134,8 +173,23 @@ class HBNBCommand(cmd.Cmd):
         print("Displays all instances/instances of a specified class\n")
         print("Usage: all [<class_name>]\n")
 
-    def do_update(self, arg):
+    def do_count(self, arg):
+        if not arg:
+            print("** class name missing **")
+            return
+        class_name = arg.split(" ")[0]
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+        count = sum(1 for instance in storage.all().values() if isinstance(instance, classes[class_name]))
+        print(count)
 
+    def help_count(self):
+        """Prints help documentation for count"""
+        print("Counts the number of instances of a specified class\n")
+        print("Usage: count <class_name>\n")
+
+    def do_update(self, arg):
         args = arg.split()
         class_name = args[0]
 
@@ -172,7 +226,6 @@ class HBNBCommand(cmd.Cmd):
 
         attribute_value = " ".join(args[3:]).strip('"')
 
-
         if not hasattr(instance, attribute_name):
             setattr(instance, attribute_name, "")
 
@@ -188,13 +241,11 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> <attribute_value>\n")
 
 
-
 if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
     hbnb_cmd.intro = ""
-
     hbnb_cmd.prompt = "(hbnb) "
 
     for command in commands:

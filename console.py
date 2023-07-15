@@ -214,27 +214,6 @@ class HBNBCommand(cmd.Cmd):
         """Updates the attribs of a specific instance."""
 
         args = arg.split()
-        """if len(args) < 3:
-            print("Error")
-            return
-        class_name = args[0]
-        instance_id = args[1]
-        if class_name not in classes:
-            print("** class doesn't exist **")
-            return
-        key = "{}.{}".format(class_name, instance_id)
-        if key not in storage.all():
-            print("no instance found **")
-            return
-        instance = storage.all()[key]
-        attribute_dict = eval("{" + " ".join(args[2:]) + "}")
-        for attribute_name, attribute_value in attribute_dict.items():
-            if not hasattr(instance, attribute_name):
-                setattr(instance, attribute_name, "")
-            attribute_type = type(getattr(instance, attribute_name))
-            casted_value = attribute_type(attribute_value)
-            setattr(instance, attribute_name, casted_value)
-        instance.save()"""
         class_name = args[0]
 
         if class_name not in classes:
@@ -280,6 +259,7 @@ class HBNBCommand(cmd.Cmd):
         print("Updates the attrs of a specific instance\n")
         print("Usage: update <class_name> <instance_id> <attribute_name> "
               "<attribute_value>\n")
+
 
 if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')

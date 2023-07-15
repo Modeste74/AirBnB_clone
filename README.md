@@ -134,6 +134,7 @@ amenity.save()
 amenity.delete()
 
 Inheritance
+------------
 The Amenity class inherits from the BaseModel class.
 This means that the Amenity class inherits all the attributes and
 methods from the BaseModel class, which provides basic functionality
@@ -189,7 +190,9 @@ base_model.save()
 # Convert the instance to a dictionary
 base_model_dict = base_model.to_dict()
 print(base_model_dict)
+
 Inheritance
+------------
 Other classes in the system can inherit from the BaseModel class
 to inherit its attributes and methods. By doing so, these classes
 can benefit from the common functionality provided by the BaseModel
@@ -242,7 +245,9 @@ city.save()
 
 # Delete the instance
 city.delete()
+
 Inheritance
+------------
 The City class inherits from the BaseModel class. This means that the
 City class inherits all the attributes and methods from the BaseModel class,
 which provides basic functionality for managing instances.
@@ -306,11 +311,179 @@ place.save()
 
 # Delete the instance
 place.delete()
+
 Inheritance
+-----------
 The Place class inherits from the BaseModel class. This means that the
 Place class inherits all the attributes and methods from the BaseModel
 class, which provides basic functionality for managing instances.
 
 For more information on the BaseModel class, please refer to the BaseModel README.
 
+Review Class
+------------
+This module contains the Review class, which represents a review in the system.
 
+Class Details
+-------------
+Class: Review
+Inheritance: BaseModel
+Attributes:
+place_id (str): The ID of the place associated with the review.
+user_id (str): The ID of the user who wrote the review.
+text (str): The content of the review.
+
+Usage
+------
+To use the Review class, follow these steps:
+
+1. Import the Review class:
+from models.review import Review
+2. Create an instance of the Review class:
+review = Review()
+3. Access and modify the attributes of the Review instance:
+review.place_id = "123"
+review.user_id = "456"
+review.text = "Great place to stay!"
+4. Save the changes to the instance:
+review.save()
+
+Examples
+Here are some examples to demonstrate the usage of the Review class:
+
+# Create a new Review instance
+review = Review()
+review.place_id = "123"
+review.user_id = "456"
+review.text = "Great place to stay!"
+
+# Save the instance
+review.save()
+
+# Access the attributes
+print(review.place_id)  # Output: 123
+print(review.user_id)   # Output: 456
+print(review.text)      # Output: Great place to stay!
+
+# Update the attributes
+review.text = "Wonderful experience!"
+review.save()
+
+# Delete the instance
+review.delete()
+
+Inheritance
+-----------
+The Review class inherits from the BaseModel class. This means that
+the Review class inherits all the attributes and methods from the BaseModel
+class, which provides basic functionality for managing instances.
+
+For more information on the BaseModel class, please refer to the BaseModel README.
+
+State Class
+==============
+This module contains the State class, which represents a state in the system.
+
+Class Details
+-------------
+Class: State
+Inheritance: BaseModel
+Attributes:
+name (str): The name of the state.
+
+Usage
+------
+To use the State class, follow these steps:
+
+1. Import the State class:
+from models.state import State
+2. Create an instance of the State class:
+state = State()
+3. Access and modify the attributes of the State instance:
+state.name = "California"
+4. Save the changes to the instance:
+state.save()
+
+Examples
+Here are some examples to demonstrate the usage of the State class:
+
+# Create a new State instance
+state = State()
+state.name = "California"
+
+# Save the instance
+state.save()
+
+# Access the attributes
+print(state.name)  # Output: California
+
+# Update the attributes
+state.name = "New York"
+state.save()
+
+# Delete the instance
+state.delete()
+
+Inheritance
+-----------
+The State class inherits from the BaseModel class. This means that
+the State class inherits all the attributes and methods from the BaseModel
+class, which provides basic functionality for managing instances.
+
+For more information on the BaseModel class, please refer to the BaseModel README.
+
+User Class
+-----------
+This module contains the User class, which represents a user in the HBNB system.
+
+Class Details
+--------------
+Class: User
+Inheritance: BaseModel
+Attributes:
+email (str): The email address of the user.
+password (str): The password of the user.
+first_name (str): The first name of the user.
+last_name (str): The last name of the user.
+
+Usage
+------
+To use the User class, follow these steps:
+
+1. Import the User class:
+from models.user import User
+2. Create an instance of the User class:
+user = User()
+3. Access and modify the attributes of the User instance:
+user.email = "john@example.com"
+user.first_name = "John"
+4. Save the changes to the instance:
+user.save()
+
+Examples
+Here are some examples to demonstrate the usage of the User class:
+user = User()
+user.email = "john@example.com"
+user.first_name = "John"
+
+# Save the instance
+user.save()
+
+# Access the attributes
+print(user.email)       # Output: john@example.com
+print(user.first_name)  # Output: John
+
+# Update the attributes
+user.first_name = "Jane"
+user.save()
+
+# Delete the instance
+user.delete()
+
+Inheritance
+-----------
+The User class inherits from the BaseModel class. This means that the
+User class inherits all the attributes and methods from the BaseModel
+class, which provides basic functionality for managing instances.
+
+For more information on the BaseModel class, please refer to the BaseModel README.

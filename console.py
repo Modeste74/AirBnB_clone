@@ -282,7 +282,9 @@ class HBNBCommand(cmd.Cmd):
               "<attribute_value>\n")
 
 
-if not sys.stdin.isatty():
+if __name__ == "__main__":
+    HBNBCommand().cmdloop()
+"""if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
@@ -298,4 +300,4 @@ if not sys.stdin.isatty():
     print(hbnb_cmd.prompt)
 else:
     if __name__ == '__main__':
-        HBNBCommand().cmdloop()
+        HBNBCommand().cmdloop()"""

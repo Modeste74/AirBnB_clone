@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""This module provides a command-line interface for the HBNB program."""
+
 import re
 import cmd
 import sys
@@ -11,10 +13,23 @@ from models.amenity import Amenity
 from models.review import Review
 from models import storage
 
-classes = {"BaseModel": BaseModel, "User": User, "Place": Place,
-        "City": City, "State": State, "Amenity": Amenity,
-        "Review": Review}
+classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "Place": Place,
+        "City": City,
+        "State": State,
+        "Amenity": Amenity,
+        "Review": Review
+        }
+
+
 class HBNBCommand(cmd.Cmd):
+    """
+    Class representing hbnb command line interface,
+    inherits from the cmd.Cmd class.
+    """
+
     prompt = "(hbnb) "
 
     def do_quit(self, arg):
@@ -39,6 +54,10 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def precmd(self, line):
+        """
+        Hook method used to hadle specific methods before
+        execution of a command.
+        """
         line = line.strip()
         components = line.split(".")
         if len(components) > 1:
@@ -63,12 +82,15 @@ class HBNBCommand(cmd.Cmd):
                 instance_id, updates_str = command.split(",", 1)
                 instance_id = instance_id.strip(' "')
                 updates = eval(updates_str.strip())
-                attribute_updates = " ".join([f"{key} {value}" for key, value in updates.items()])
+                attribute_updates = " ".join(
+                        [f"{key} {value}" for key, value in updates.items()]
+                        )
                 return f"update {class_name} {instance_id} {attribute_updates}"
 
         return line
 
     def do_create(self, arg):
+        """Creates new instance of specified class"""
         if not arg:
             print("** class name missing **")
             return
@@ -86,6 +108,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: create <class_name>\n")
 
     def do_show(self, arg):
+        """Displays details of specific instance"""
         if not arg:
             print("** class name missing **")
             return
@@ -114,6 +137,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: show <class_name> <instance_id>\n")
 
     def do_destroy(self, arg):
+        """Deletes a specified instance"""
         if not arg:
             print("** class name missing **")
             return
@@ -143,6 +167,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: destroy <class_name> <instance_id>\n")
 
     def do_all(self, arg):
+        """Displays all instances/instances of a specified class."""
         if arg not in classes and arg != "":
             print("** class doesn't exist **")
             return
@@ -164,7 +189,9 @@ class HBNBCommand(cmd.Cmd):
         """Prints help documentation for all"""
         print("Displays all instances/instances of a specified class\n")
         print("Usage: all [<class_name>]\n")
+
     def do_count(self, arg):
+        """Counts the num of instances of a specified class."""
         if not arg:
             print("** class name missing **")
             return
@@ -172,7 +199,10 @@ class HBNBCommand(cmd.Cmd):
         if class_name not in classes:
             print("** class doesn't exist **")
             return
-        count = sum(1 for instance in storage.all().values() if isinstance(instance, classes[class_name]))
+        count = sum(
+                1 for instance in storage.all().values()
+                if isinstance(instance, classes[class_name])
+                )
         print(count)
 
     def help_count(self):
@@ -181,6 +211,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: count <class_name>\n")
 
     def do_update(self, arg):
+        """Updates the attribs of a specific instance."""
 
         args = arg.split()
         """if len(args) < 3:
@@ -247,8 +278,8 @@ class HBNBCommand(cmd.Cmd):
     def help_update(self):
         """Prints the help documentation for update"""
         print("Updates the attrs of a specific instance\n")
-        print("Usage: update <class_name> <instance_id> <attribute_name> <attribute_value>\n")
-
+        print("Usage: update <class_name> <instance_id> <attribute_name> "
+              "<attribute_value>\n")
 
 
 if not sys.stdin.isatty():

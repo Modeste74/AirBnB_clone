@@ -226,7 +226,9 @@ class TestHBNBCommand(unittest.TestCase):
         instance.save()
         instance_id = instance.id
         with patch('sys.stdout', new=StringIO()) as fake_out:
-            self.console.onecmd(f"update BaseModel {instance_id} attribute_name")
+            self.console.onecmd(
+                    f"update BaseModel {instance_id} attribute_name"
+                    )
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "** value missing **")
 
@@ -566,13 +568,14 @@ class TestHBNBCommand(unittest.TestCase):
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "** class doesn't exist **")
 
-
     def test_do_update_with_invalid_class_name(self):
         instance = BaseModel()
         instance.save()
         instance_id = instance.id
         with patch('sys.stdout', new=StringIO()) as fake_out:
-            self.console.onecmd(f"update InvalidClass {instance_id} name 'New Name'")
+            self.console.onecmd(
+                    f"update InvalidClass {instance_id} name 'New Name'"
+                    )
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "** class doesn't exist **")
 

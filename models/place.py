@@ -1,9 +1,11 @@
 #!/usr/bin/python3
-
+"""defines a subclass"""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """represents a subclass
+    Place"""
     city_id = ""
     user_id = ""
     name = ""
@@ -17,4 +19,5 @@ class Place(BaseModel):
     amenity_ids = []
 
     def __init__(self, *args, **kwargs):
+        """intializes the subclass"""
         super().__init__(*args, **kwargs)

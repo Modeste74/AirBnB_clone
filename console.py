@@ -281,10 +281,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> "
               "<attribute_value>\n")
 
-
-if __name__ == "__main__":
-    HBNBCommand().cmdloop()
-"""if not sys.stdin.isatty():
+if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
@@ -300,4 +297,4 @@ if __name__ == "__main__":
     print(hbnb_cmd.prompt)
 else:
     if __name__ == '__main__':
-        HBNBCommand().cmdloop()"""
+        HBNBCommand().cmdloop()

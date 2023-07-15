@@ -14,7 +14,7 @@ from models.amenity import Amenity
 from models.review import Review
 from models import storage
 
-classes = {
+"""classes = {
         "BaseModel": BaseModel,
         "User": User,
         "Place": Place,
@@ -22,7 +22,7 @@ classes = {
         "State": State,
         "Amenity": Amenity,
         "Review": Review
-        }
+        }"""
 
 
 class HBNBCommand(cmd.Cmd):
@@ -32,6 +32,18 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) " if sys.__stdin__.isatty() else ""
+
+    classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "Place": Place,
+        "City": City,
+        "State": State,
+        "Amenity": Amenity,
+        "Review": Review
+        }
+
+    valid_commands = ['all', 'count', 'show', 'destroy', 'update']
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -61,39 +73,34 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """
-        Hook method used to hadle specific methods before
+        Hook method used to handle specific methods before
         execution of a command.
         """
-        line = line.strip()
-        components = line.split(".")
-        if len(components) > 1:
-            class_name, command = components[0], components[1]
-            """class_name = class_name.capitalize()"""
-            if class_name not in classes:
-                print("** class doesn't exist **")
-                return ""
-            if command == "all()":
-                return f"all {class_name}"
-            if command == "count()":
-                return f"count {class_name}"
-            if command.startswith("show(") and command.endswith(")"):
-                instance_id = re.search(r'"([^"]*)"', line).group(1)
-                return f"show {class_name} {instance_id}"
-            if command.startswith("destroy(") and command.endswith(")"):
-                command = command[8:-1].strip()
-                instance_id = re.search(r'"([^"]*)"', line).group(1)
-                return f"destroy {class_name} {instance_id}"
-            if command.startswith("update("):
-                command = command[7:-1].strip()
-                instance_id, updates_str = command.split(",", 1)
-                instance_id = instance_id.strip(' "')
-                updates = eval(updates_str.strip())
-                attribute_updates = " ".join(
-                        [f"{key} {value}" for key, value in updates.items()]
-                        )
-                return f"update {class_name} {instance_id} {attribute_updates}"
+        class_name = command = item_id = args = ''
+        if not ('.' in line and '(' in line and ')' in line):
+            return line
+        try:
+            parsed_line = line[:]
+            class_name = parsed_line[:parsed_line.find('.')]
+            command = parsed_line[parsed_line.find('.') + 1:parsed_line.find('(')]
+            if command not in valid_commands:
+                raise Exception
+            parsed_line = parsed_line[parsed_line.find('(') + 1:parsed_line.find(')')]
+            if parsed_line:
+                parsed_line = parsed_line.partition(', ')
+                item_id = parsed_line[0].replace('\"', '')
+                parsed_line = parsed_line[2].strip()
+                if parsed_line:
+                    if parsed_line[0] == '{' and parsed_line[-1] == '}' and type(eval(parsed_line)) is dict:
+                        args = parsed_line
+                    else:
+                        args = parsed_line.replace(',', '')
+                        line = ' '.join([command, class_name, item_id, args])
+        except Exception as error:
+            pass
+        finally:
+            return line
 
-        return line
 
     def postcmd(self, stop, line):
         """Prints if isatty is false"""

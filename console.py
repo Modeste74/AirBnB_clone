@@ -4,6 +4,7 @@
 import re
 import cmd
 import sys
+import os
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -30,7 +31,12 @@ class HBNBCommand(cmd.Cmd):
     inherits from the cmd.Cmd class.
     """
 
-    prompt = "(hbnb) "
+    prompt = "(hbnb) " if sys.__stdin__.isatty() else ""
+
+    def preloop(self):
+        """Prints if isatty is false"""
+        if not sys.__stdin__.isatty():
+            print('(hbnb)')
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
@@ -88,6 +94,12 @@ class HBNBCommand(cmd.Cmd):
                 return f"update {class_name} {instance_id} {attribute_updates}"
 
         return line
+
+    def postcmd(self, stop, line):
+        """Prints if isatty is false"""
+        if not sys.__stdin__.isatty():
+            print('(hbnb) ', end='')
+        return stop
 
     def do_create(self, arg):
         """Creates new instance of specified class"""
@@ -260,8 +272,9 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> "
               "<attribute_value>\n")
 
-
-if not sys.stdin.isatty():
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
+"""if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
@@ -277,4 +290,4 @@ if not sys.stdin.isatty():
     print(hbnb_cmd.prompt)
 else:
     if __name__ == '__main__':
-        HBNBCommand().cmdloop()
+        HBNBCommand().cmdloop()"""

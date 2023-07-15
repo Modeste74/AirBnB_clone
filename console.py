@@ -4,7 +4,6 @@
 import re
 import cmd
 import sys
-import os
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -31,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
     inherits from the cmd.Cmd class.
     """
 
-    prompt = "(hbnb) " if sys.__stdin__.isatty() else ""
+    prompt = "(hbnb) "
 
     classes = {
         "BaseModel": BaseModel,
@@ -42,13 +41,6 @@ class HBNBCommand(cmd.Cmd):
         "Amenity": Amenity,
         "Review": Review
         }
-
-    valid_commands = ['all', 'count', 'show', 'destroy', 'update']
-
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb)')
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
@@ -73,40 +65,39 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """
-        Hook method used to handle specific methods before
+        Hook method used to hadle specific methods before
         execution of a command.
         """
-        class_name = command = item_id = args = ''
-        if not ('.' in line and '(' in line and ')' in line):
-            return line
-        try:
-            parsed_line = line[:]
-            class_name = parsed_line[:parsed_line.find('.')]
-            command = parsed_line[parsed_line.find('.') + 1:parsed_line.find('(')]
-            if command not in valid_commands:
-                raise Exception
-            parsed_line = parsed_line[parsed_line.find('(') + 1:parsed_line.find(')')]
-            if parsed_line:
-                parsed_line = parsed_line.partition(', ')
-                item_id = parsed_line[0].replace('\"', '')
-                parsed_line = parsed_line[2].strip()
-                if parsed_line:
-                    if parsed_line[0] == '{' and parsed_line[-1] == '}' and type(eval(parsed_line)) is dict:
-                        args = parsed_line
-                    else:
-                        args = parsed_line.replace(',', '')
-                        line = ' '.join([command, class_name, item_id, args])
-        except Exception as error:
-            pass
-        finally:
-            return line
+        line = line.strip()
+        components = line.split(".")
+        if len(components) > 1:
+            class_name, command = components[0], components[1]
+            """class_name = class_name.capitalize()"""
+            if class_name not in classes:
+                print("** class doesn't exist **")
+                return ""
+            if command == "all()":
+                return f"all {class_name}"
+            if command == "count()":
+                return f"count {class_name}"
+            if command.startswith("show(") and command.endswith(")"):
+                instance_id = re.search(r'"([^"]*)"', line).group(1)
+                return f"show {class_name} {instance_id}"
+            if command.startswith("destroy(") and command.endswith(")"):
+                command = command[8:-1].strip()
+                instance_id = re.search(r'"([^"]*)"', line).group(1)
+                return f"destroy {class_name} {instance_id}"
+            if command.startswith("update("):
+                command = command[7:-1].strip()
+                instance_id, updates_str = command.split(",", 1)
+                instance_id = instance_id.strip(' "')
+                updates = eval(updates_str.strip())
+                attribute_updates = " ".join(
+                        [f"{key} {value}" for key, value in updates.items()]
+                        )
+                return f"update {class_name} {instance_id} {attribute_updates}"
 
-
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop
+        return line
 
     def do_create(self, arg):
         """Creates new instance of specified class"""
@@ -279,9 +270,8 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> "
               "<attribute_value>\n")
 
-if __name__ == '__main__':
-    HBNBCommand().cmdloop()
-"""if not sys.stdin.isatty():
+
+if not sys.stdin.isatty():
     commands = sys.stdin.read().strip().split('\n')
     hbnb_cmd = HBNBCommand()
     hbnb_cmd.use_rawinput = False
@@ -297,4 +287,4 @@ if __name__ == '__main__':
     print(hbnb_cmd.prompt)
 else:
     if __name__ == '__main__':
-        HBNBCommand().cmdloop()"""
+        HBNBCommand().cmdloop()

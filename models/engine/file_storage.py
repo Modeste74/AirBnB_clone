@@ -5,6 +5,7 @@ managing obj storage in file.
 """
 
 import json
+from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -37,7 +38,6 @@ class FileStorage:
 
     def reload(self):
         """Loads objs from file & stores in storage."""
-        from models.base_model import BaseModel
         try:
             with open(self.__file_path, "r") as filename:
                 json_data = json.load(filename)

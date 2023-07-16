@@ -13,7 +13,7 @@ from models.amenity import Amenity
 from models.review import Review
 from models import storage
 
-"""classes = {
+classes = {
         "BaseModel": BaseModel,
         "User": User,
         "Place": Place,
@@ -21,7 +21,7 @@ from models import storage
         "State": State,
         "Amenity": Amenity,
         "Review": Review
-        }"""
+        }
 
 
 class HBNBCommand(cmd.Cmd):
@@ -31,16 +31,6 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-
-    classes = {
-        "BaseModel": BaseModel,
-        "User": User,
-        "Place": Place,
-        "City": City,
-        "State": State,
-        "Amenity": Amenity,
-        "Review": Review
-        }
 
     def do_quit(self, arg):
         """Quit command to exit the program"""

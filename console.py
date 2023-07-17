@@ -247,9 +247,8 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 4:
             print("** value missing **")
             return
-
         attribute_name = args[2]
-        attribute_value = " ".join(args[3:]).strip('"')
+        attribute_value = args[3].strip('"')
         if not hasattr(instance, attribute_name):
             setattr(instance, attribute_name, "")
         attribute_type = type(getattr(instance, attribute_name))

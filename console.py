@@ -77,15 +77,14 @@ class HBNBCommand(cmd.Cmd):
                 command = command[8:-1].strip()
                 instance_id = re.search(r'"([^"]*)"', line).group(1)
                 return f"destroy {class_name} {instance_id}"
-            if command.startswith("update("):
+            if command.startswith("update(") and command.endswith(")"):
                 command = command[7:-1].strip()
                 instance_id, updates_str = command.split(",", 1)
+                instance_id, attribute_name, attribute_value = command.split(",", 2)
                 instance_id = instance_id.strip(' "')
-                updates = eval(updates_str.strip())
-                attribute_updates = " ".join(
-                        [f"{key} {value}" for key, value in updates.items()]
-                        )
-                return f"update {class_name} {instance_id} {attribute_updates}"
+                attribute_name = attribute_name.strip(' "')
+                attribute_value = attribute_value.strip(' "')
+                return f"update {class_name} {instance_id} {attribute_name} {attribute_value}"
 
         return line
 
@@ -263,21 +262,6 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <class_name> <instance_id> <attribute_name> "
               "<attribute_value>\n")
 
-
-"""if not sys.stdin.isatty():
-    commands = sys.stdin.read().strip().split('\n')
-    hbnb_cmd = HBNBCommand()
-    hbnb_cmd.use_rawinput = False
-    hbnb_cmd.intro = ""
-
-    hbnb_cmd.prompt = "(hbnb) "
-
-    for command in commands:
-        print(hbnb_cmd.prompt)
-        hbnb_cmd.onecmd(command)
-        if hbnb_cmd.do_quit:
-            break
-    print(hbnb_cmd.prompt)"""
 
 if __name__ == '__main__':
         HBNBCommand().cmdloop()

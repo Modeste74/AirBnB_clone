@@ -28,7 +28,7 @@ class BaseModel:
         """Returns the string rep of
         the BaseModel class
         """
-        return "[{}] ({}) {}".format(self.__class__.__name__,
+        return "[{:s}] ({:s}) {}".format(self.__class__.__name__,
                                      self.id, self.__dict__)
 
     def save(self):

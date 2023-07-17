@@ -275,6 +275,6 @@ if not sys.stdin.isatty():
         if hbnb_cmd.do_quit:
             break
     print(hbnb_cmd.prompt)
-else:
-    if __name__ == '__main__':
+
+if __name__ == '__main__':
         HBNBCommand().cmdloop()

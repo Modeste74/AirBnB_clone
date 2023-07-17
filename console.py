@@ -233,7 +233,7 @@ class HBNBCommand(cmd.Cmd):
         key = "{}.{}".format(class_name, instance_id)
 
         if key not in storage.all():
-            print("no instance found **")
+            print("** no instance found **")
             return
 
         instance = storage.all()[key]

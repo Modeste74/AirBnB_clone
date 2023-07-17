@@ -159,6 +159,7 @@ class HBNBCommand(cmd.Cmd):
             return
         instance = storage.all()[key]
         del storage.all()[key]
+        storage.save()
         del instance
 
     def help_destroy(self):
